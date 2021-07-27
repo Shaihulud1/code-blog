@@ -10,12 +10,12 @@ import Message from 'primevue/message'
 import Button from 'primevue/button'
 import PanelMenu from 'primevue/panelmenu'
 import Sidebar from 'primevue/sidebar'
+import Divider from 'primevue/divider';
 
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
-// import 'primeflex/primeflex.css'
-
-import 'primevue/resources/themes/saga-blue/theme.css'
+import 'primevue/resources/themes/arya-purple/theme.css'
+//import './assets/fonts/RobotoCondensed-Regular.ttf'
 
 const app = createApp(App)
 app.use(store)
@@ -28,5 +28,6 @@ app.component('Button', Button)
 app.component('InputMask', InputMask)
 app.component('PanelMenu', PanelMenu)
 app.component('Sidebar', Sidebar)
+app.component('Divider', Divider)
 
 app.mount('#app')

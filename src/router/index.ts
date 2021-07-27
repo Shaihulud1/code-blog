@@ -21,12 +21,20 @@ const routes: Route[] = [
     component: () => import('../views/Auth.vue')
   },
   {
-    path: '/home',
-    name: 'About',
+    path: '/main',
+    name: 'Main',
     meta: {
-      title: 'Главная'
+      title: 'Админ панель'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
+    component: () => import('../views/Main.vue')
+  },
+  {
+    path: '/users',
+    name: 'User',
+    meta: {
+      title: 'Пользователи'
+    },
+    component: () => import('../views/User.vue')
   }
 ]
 

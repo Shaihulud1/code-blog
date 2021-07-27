@@ -1,47 +1,60 @@
 <template>
-  <div class="basic-wrapper">
-    <Sidebar
-      v-model:visible="isMenuVisible"
-      position="left"
-    >
-      <PanelMenu :model="menu" />
-    </Sidebar>
+  <Sidebar
+    v-model:visible="isMenuVisible"
+    class="side-menu"
+    position="left"
+  >
+    <PanelMenu :model="menu" />
+  </Sidebar>
 
-    <div class="top-menu">
-      <div class="top-menu__menu top-menu__item">
-        <a @click="isMenuVisible = !isMenuVisible"><i class="pi pi-bars" /></a>
-      </div>
-      <div class="top-menu__profile top-menu__item">
-        <a href="">Администратор</a>
-      </div>
+  <div class="top-menu">
+    <div class="top-menu__menu top-menu__item">
+      <a
+        class="vi-title"
+        @click="isMenuVisible = !isMenuVisible"
+      ><i class="pi pi-bars" /></a>
     </div>
-    <p>
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint nesciunt ipsa at.
-      Autem error commodi eum placeat esse perspiciatis delectus sunt rem, aut velit alias architecto.
-      In numquam facere culpa!
-    </p>
+    <div class="top-menu__profile top-menu__item">
+      <a class="vi-title">Администратор</a>
+    </div>
+  </div>
+  <div class="basic-content">
+    <h1 class="content-page-title vi-title">
+      {{ pageTitle }}
+    </h1>
+    <hr>
     <router-view />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   setup () {
+
     const isMenuVisible = ref(false)
     const menu = ref([
       {
         label: 'Главная',
-        icon: 'pi pi-fw pi-home'
+        icon: 'pi pi-fw pi-home',
+        url: '/main'
       },
       {
         label: 'Пользователи',
-        icon: 'pi pi-fw pi-user'
+        icon: 'pi pi-fw pi-user',
+        url: '/users',
+      },
+      {
+        label: 'Задачи',
+        icon: 'pi pi-fw pi-check',
+        url: '/orders',
       },
       {
         label: 'Аптеки',
-        icon: 'pi pi-fw pi-plus-circle'
+        icon: 'pi pi-fw pi-plus-circle',
+        url: '/pharms'
       },
       {
         label: 'Система',
@@ -49,17 +62,34 @@ export default defineComponent({
         items: [
           {
             label: 'События',
-            icon: 'pi pi-fw pi-calendar-times'
+            icon: 'pi pi-fw pi-calendar-times',
+            url: '/events'
           }
         ]
       }
     ])
     return { menu, isMenuVisible }
+  },
+  computed: {
+    pageTitle() {
+      const route = useRoute();
+      return route.meta.title
+    }  
   }
 })
 </script>
 
-<style>
+<style lang="scss">
+  .content-page-title {
+    text-align: right;
+  }
+  .p-sidebar-content {
+    padding: 0 !important;
+  }
+
+  .basic-content {
+    margin: 5%
+  }
 	a {
 		text-decoration: none;
 		cursor: pointer;
@@ -68,19 +98,27 @@ export default defineComponent({
 	.top-menu {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-auto-rows: 50px;
-	}
-	.top-menu__profile {
-		justify-self: end;
-		margin-top: 15px;
-	}
-	.top-menu__menu i {
-		font-size: 35px;
-	}
-	.top-menu__item {
-		align-items: center;
-		justify-items: center;
-		align-content: center;
-		grid-auto-flow: column;
+		grid-auto-rows: 60px;
+    background-color: $topBGColor;
+    width: 100vw;
+		&__profile {
+			justify-self: end;
+      margin-right: 30px;
+      margin-top: 20px;
+		}
+		&__menu {
+      margin-top: 15px;
+      margin-left: 30px;
+      i {
+        font-size: 35px;
+      }
+			
+		}
+		&__item {
+			align-items: center;
+			justify-items: center;
+			align-content: center;
+			grid-auto-flow: column;
+		}
 	}
 </style>

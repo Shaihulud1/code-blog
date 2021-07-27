@@ -19,12 +19,21 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 html,
 body {
+    background-color: $mainBGColor;
     min-height: 100%;
+    color: $textColor;
+    margin: auto;
+    font-family: 'Roboto Condensed', sans-serif;
 }
-body {
-    background-color: dodgerblue;
+.vi {
+    &-text {
+        color: $textColor;
+    }
+    &-title {
+        color: $titleColor;
+    }
 }
 </style>
