@@ -1,30 +1,30 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <component :is="layout" />
 </template>
 
+<script lang="ts">
+import Auth from "./layouts/Auth.vue";
+import Basic from "./layouts/Basic.vue";
+import { useRoute } from "vue-router";
+
+export default {
+    name: "App",
+    components: { Auth, Basic },
+    computed: {
+        layout(): string {
+            const route = useRoute();
+            return route.meta?.layout ? "Auth" : "Basic";
+        }
+    }
+};
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+html,
+body {
+    min-height: 100%;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+body {
+    background-color: dodgerblue;
 }
 </style>

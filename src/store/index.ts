@@ -1,12 +1,8 @@
-import { createStore } from 'vuex'
+import Vuex, { createStore } from 'vuex'
+import RefreshToken from './modules/RefreshToken'
 
-export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+export default new Vuex.Store({
   modules: {
+    RefreshToken
   }
 })
