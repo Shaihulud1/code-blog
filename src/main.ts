@@ -1,7 +1,9 @@
+import VueApollo from 'vue-apollo'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import apolloClient from './apollo'
 import PrimeVue from 'primevue/config'
 
 import InputText from 'primevue/inputtext'
@@ -10,17 +12,21 @@ import Message from 'primevue/message'
 import Button from 'primevue/button'
 import PanelMenu from 'primevue/panelmenu'
 import Sidebar from 'primevue/sidebar'
-import Divider from 'primevue/divider';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';
 
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
 import 'primevue/resources/themes/arya-purple/theme.css'
-//import './assets/fonts/RobotoCondensed-Regular.ttf'
-
+const apolloProvider = new VueApollo({
+    defaultClient: apolloClient
+})
 const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(PrimeVue)
+app.use(apolloProvider)
 
 app.component('Message', Message)
 app.component('InputText', InputText)
@@ -28,6 +34,8 @@ app.component('Button', Button)
 app.component('InputMask', InputMask)
 app.component('PanelMenu', PanelMenu)
 app.component('Sidebar', Sidebar)
-app.component('Divider', Divider)
+app.component('DataTable', DataTable)
+app.component('Column', Column)
+app.component('ColumnGroup', ColumnGroup)
 
 app.mount('#app')

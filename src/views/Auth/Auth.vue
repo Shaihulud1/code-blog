@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, Ref } from 'vue'
-import ViAxios from '../modules/ViAxios'
+import ViAxios from '@/modules/ViAxios'
 import { RefreshTokenResponse } from './types'
 import router from '@/router'
 

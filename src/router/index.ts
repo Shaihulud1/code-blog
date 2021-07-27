@@ -18,7 +18,7 @@ const routes: Route[] = [
       title: 'Авторизация',
       layout: 'Auth'
     },
-    component: () => import('../views/Auth.vue')
+    component: () => import('../views/Auth/Auth.vue')
   },
   {
     path: '/main',
@@ -26,7 +26,7 @@ const routes: Route[] = [
     meta: {
       title: 'Админ панель'
     },
-    component: () => import('../views/Main.vue')
+    component: () => import('../views/Main/Main.vue')
   },
   {
     path: '/users',
@@ -34,7 +34,7 @@ const routes: Route[] = [
     meta: {
       title: 'Пользователи'
     },
-    component: () => import('../views/User.vue')
+    component: () => import('../views/User/User.vue')
   }
 ]
 
