@@ -35,6 +35,30 @@ const routes: Route[] = [
       title: 'Пользователи'
     },
     component: () => import('../views/User/User.vue')
+  },
+  {
+    path: '/orders',
+    name: 'Order',
+    meta: {
+      title: 'Задачи'
+    },
+    component: () => import('../views/Order/Order.vue')
+  },
+  {
+    path: '/pharms',
+    name: 'Pharm',
+    meta: {
+      title: 'Аптеки'
+    },
+    component: () => import('../views/Pharm/Pharm.vue')
+  },
+  {
+    path: '/events',
+    name: 'Event',
+    meta: {
+      title: 'События'
+    },
+    component: () => import('../views/Event/Event.vue')
   }
 ]
 

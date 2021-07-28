@@ -3,7 +3,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import apolloClient from './apollo'
 import PrimeVue from 'primevue/config'
 
 import InputText from 'primevue/inputtext'
@@ -19,15 +18,12 @@ import ColumnGroup from 'primevue/columngroup';
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
 import 'primevue/resources/themes/arya-purple/theme.css'
+
 const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(PrimeVue)
 
-const apolloProvider = new VueApollo({
-    defaultClient: apolloClient
-})
-app.use(apolloProvider)
 
 app.component('Message', Message)
 app.component('InputText', InputText)

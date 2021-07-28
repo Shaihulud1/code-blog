@@ -3,7 +3,7 @@
     <DataTable
       v-model:filters="filter"
       v-model:selection="selected"
-      :value="userFiltered"
+      :value="orderFiltered"
       :paginator="false"
       selection-mode="single"
       data-key="id"
@@ -17,28 +17,44 @@
           <i class="pi pi-search" />
           <InputText
             v-model="search"
-            placeholder="Поиск по имени"
+            placeholder="Поиск по отвественному"
           />
         </span>
       </template>
       <Column
-        header="Имя"
+        header="Ответственный"
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.fullName }}</span>
+          <span class="image-text">{{ slotProps.data.serviceNumber.user.fullName }}</span>
         </template>
       </Column>
       <Column
-        header="Телефон"
+        header="Дата"
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.phone }}</span>
+          <span class="image-text">{{ slotProps.data.orderDate }}</span>
+        </template>
+      </Column>
+      <Column
+        header="Время"
+        style="width:25%"
+      >
+        <template #body="slotProps">
+          <span class="image-text">{{ slotProps.data.time }}</span>
+        </template>
+      </Column>
+      <Column
+        header="Статус"
+        style="width:25%"
+      >
+        <template #body="slotProps">
+          <span class="image-text">{{ slotProps.data.status }}</span>
         </template>
       </Column>
       <template #empty>
-        Пользователи не найдены
+        Задачи не найдены
       </template>
     </DataTable>
     <Message
@@ -51,11 +67,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, watch, computed, reactive } from 'vue'
+import { defineComponent, ref, Ref, computed } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
-import { UserListItem } from './types'
 
 export default defineComponent({
     setup() {
@@ -64,22 +79,30 @@ export default defineComponent({
       const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
       
       const { result, loading, error  } = useQuery(gql`
-        query getUsers {
-          users {
+        query getOrders {
+          orders {
             id,
-            fullName,
-            phone,
+            serviceNumber {
+                id,
+                user {
+                    id,
+                    fullName
+                }
+            },
+            status,
+            orderDate,
+            time,
           }
         }
       `)
-      let users = useResult(result)
+      let orders = useResult(result)
 
-      const userFiltered = computed(() => {
-        return users.value ? users.value.filter((e:UserListItem) => e.fullName.includes(search.value)) : []
+      const orderFiltered = computed(() => {
+        return orders.value ? orders.value.filter((e: any) => e.serviceNumber.user.fullName.includes(search.value)) : []
       })
 
       return { 
-        userFiltered, error, loading, selected, search, filter, 
+        orderFiltered, error, loading, selected, search, filter, 
       }
     },
 })

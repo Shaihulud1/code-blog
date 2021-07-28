@@ -1,9 +1,8 @@
 <template>
   <div class="user-wrapp">
     <DataTable
-      v-model:filters="filter"
       v-model:selection="selected"
-      :value="userFiltered"
+      :value="eventFiltered"
       :paginator="false"
       selection-mode="single"
       data-key="id"
@@ -17,28 +16,36 @@
           <i class="pi pi-search" />
           <InputText
             v-model="search"
-            placeholder="Поиск по имени"
+            placeholder="Поиск по пользователю"
           />
         </span>
       </template>
       <Column
-        header="Имя"
+        header="Пользователь"
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.fullName }}</span>
+          <span class="image-text">{{ slotProps.data.initiator.fullName }}</span>
         </template>
       </Column>
       <Column
-        header="Телефон"
+        header="Тип"
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.phone }}</span>
+          <span class="image-text">{{ slotProps.data.type }}</span>
+        </template>
+      </Column>
+      <Column
+        header="payload"
+        style="width:25%"
+      >
+        <template #body="slotProps">
+          <span class="image-text">{{ slotProps.data.payload }}</span>
         </template>
       </Column>
       <template #empty>
-        Пользователи не найдены
+        События не найдены
       </template>
     </DataTable>
     <Message
@@ -51,35 +58,40 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, watch, computed, reactive } from 'vue'
-import { FilterMatchMode } from 'primevue/api'
+import { defineComponent, ref, Ref, computed } from 'vue'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
-import { UserListItem } from './types'
 
 export default defineComponent({
     setup() {
       const selected = ref()
       const search: Ref<string> = ref("")
-      const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
       
       const { result, loading, error  } = useQuery(gql`
-        query getUsers {
-          users {
-            id,
-            fullName,
-            phone,
-          }
+        query getEvents {
+            events {
+                id
+                createdAt
+                initiator {
+                    id
+                    fullName
+                }
+                nodeId
+                notifiedAt
+                payload
+                type
+                updatedAt
+            }
         }
       `)
-      let users = useResult(result)
+      const events = useResult(result)
 
-      const userFiltered = computed(() => {
-        return users.value ? users.value.filter((e:UserListItem) => e.fullName.includes(search.value)) : []
+      const eventFiltered = computed(() => {
+        return events.value ? events.value.filter((e: any) => e.initiator.fullName.includes(search.value)) : []
       })
 
       return { 
-        userFiltered, error, loading, selected, search, filter, 
+        eventFiltered, error, loading, selected, search, 
       }
     },
 })

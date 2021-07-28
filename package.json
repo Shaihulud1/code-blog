@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.21",
     "@babel/parser": "^7.14.8",
     "@vue/apollo-composable": "^4.0.0-alpha.14",
     "apollo": "^2.33.4",

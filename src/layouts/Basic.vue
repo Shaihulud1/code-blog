@@ -29,32 +29,47 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { useRoute } from "vue-router";
+import { useRoute } from "vue-router"
+import router from '@/router'
 
 export default defineComponent({
   setup () {
-
     const isMenuVisible = ref(false)
+    const routeMenu = (to: string) => {
+      isMenuVisible.value = false
+      router.push(to)
+    }
+
+
     const menu = ref([
       {
         label: 'Главная',
         icon: 'pi pi-fw pi-home',
-        url: '/main'
+        //url: '/main',
+        command:() => { 
+          routeMenu('/main')
+        }
       },
       {
         label: 'Пользователи',
         icon: 'pi pi-fw pi-user',
-        url: '/users',
+        command:() => { 
+          routeMenu('/users')
+        }
       },
       {
         label: 'Задачи',
         icon: 'pi pi-fw pi-check',
-        url: '/orders',
+        command:() => { 
+          routeMenu('/orders')
+        }
       },
       {
         label: 'Аптеки',
         icon: 'pi pi-fw pi-plus-circle',
-        url: '/pharms'
+        command:() => { 
+          routeMenu('/pharms')
+        }
       },
       {
         label: 'Система',
@@ -63,7 +78,9 @@ export default defineComponent({
           {
             label: 'События',
             icon: 'pi pi-fw pi-calendar-times',
-            url: '/events'
+            command:() => { 
+              routeMenu('/events')
+            }
           }
         ]
       }

@@ -1,9 +1,8 @@
 <template>
   <div class="user-wrapp">
     <DataTable
-      v-model:filters="filter"
       v-model:selection="selected"
-      :value="userFiltered"
+      :value="pharmFiltered"
       :paginator="false"
       selection-mode="single"
       data-key="id"
@@ -17,28 +16,28 @@
           <i class="pi pi-search" />
           <InputText
             v-model="search"
-            placeholder="Поиск по имени"
+            placeholder="Поиск по номеру"
           />
         </span>
       </template>
       <Column
-        header="Имя"
+        header="Номер"
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.fullName }}</span>
+          <span class="image-text">{{ slotProps.data.id }}</span>
         </template>
       </Column>
       <Column
-        header="Телефон"
+        header="Адрес"
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.phone }}</span>
+          <span class="image-text">{{ slotProps.data.address }}</span>
         </template>
       </Column>
       <template #empty>
-        Пользователи не найдены
+        Аптеки не найдены
       </template>
     </DataTable>
     <Message
@@ -51,35 +50,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, watch, computed, reactive } from 'vue'
-import { FilterMatchMode } from 'primevue/api'
+import { defineComponent, ref, Ref, computed } from 'vue'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
-import { UserListItem } from './types'
 
 export default defineComponent({
     setup() {
       const selected = ref()
       const search: Ref<string> = ref("")
-      const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
       
       const { result, loading, error  } = useQuery(gql`
-        query getUsers {
-          users {
+        query getPharms {
+          pharms {
             id,
-            fullName,
-            phone,
+            address
           }
         }
       `)
-      let users = useResult(result)
+      const pharms = useResult(result)
 
-      const userFiltered = computed(() => {
-        return users.value ? users.value.filter((e:UserListItem) => e.fullName.includes(search.value)) : []
+      const pharmFiltered = computed(() => {
+        return pharms.value ? pharms.value.filter((e: any) => e.id.includes(search.value)) : []
       })
 
       return { 
-        userFiltered, error, loading, selected, search, filter, 
+        pharmFiltered, error, loading, selected, search, 
       }
     },
 })
