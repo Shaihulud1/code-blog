@@ -2,10 +2,8 @@ module.exports = {
     client: {
       service: {
         name: 'vi-staff',
-        url: 'http://localhost:3001/graphiql',
+        url: 'http://localhost:3001/api/graphql_dev',
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         }
       },
       // Files processed by the extension

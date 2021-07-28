@@ -65,6 +65,12 @@
         Пользователи не найдены
       </template>
     </DataTable>
+    <div
+      v-for="user in usersG"
+      :key="user.id"
+    >
+      {{ user.id }}
+    </div>
   </div>
 </template>
 
@@ -73,6 +79,7 @@ import { defineComponent, ref, Ref, watch } from 'vue'
 import { UserListItem } from './types'
 import { FilterMatchMode } from 'primevue/api'
 import gql from 'graphql-tag'
+import {useQuery} from '@vue/apollo-composable'
 
 export default defineComponent({
     setup() {
@@ -92,16 +99,22 @@ export default defineComponent({
       const search: Ref<string> = ref("")
 
       const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
-      const test = gql`query {
-                  users {
-                    id
-                  }
-                }`;
-      console.log(test)
+      const query = gql`query MyQuery {
+        users {
+          id
+        }
+      }`
+      const usersG = useQuery(query)
+      console.log(usersG)
+
       return { users, selected, search, filter }
     },
     apollo: {
-      users: gql`query Users{id}`
+      usersG: gql`query MyQuery {
+              users {
+                id
+              }
+            }`
     }
 })
 </script>

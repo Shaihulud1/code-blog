@@ -19,13 +19,14 @@ import ColumnGroup from 'primevue/columngroup';
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
 import 'primevue/resources/themes/arya-purple/theme.css'
-const apolloProvider = new VueApollo({
-    defaultClient: apolloClient
-})
 const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(PrimeVue)
+
+const apolloProvider = new VueApollo({
+    defaultClient: apolloClient
+})
 app.use(apolloProvider)
 
 app.component('Message', Message)
