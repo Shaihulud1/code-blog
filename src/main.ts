@@ -14,6 +14,10 @@ import Sidebar from 'primevue/sidebar'
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
+import Dialog from 'primevue/dialog'
+import ProgressSpinner from 'primevue/progressspinner';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
 
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
@@ -34,5 +38,9 @@ app.component('Sidebar', Sidebar)
 app.component('DataTable', DataTable)
 app.component('Column', Column)
 app.component('ColumnGroup', ColumnGroup)
+app.component('Dialog', Dialog)
+app.component('ProgressSpinner', ProgressSpinner)
+app.component('TabView', TabView)
+app.component('TabPanel', TabPanel)
 
 app.mount('#app')

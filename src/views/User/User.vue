@@ -22,6 +22,16 @@
         </span>
       </template>
       <Column
+        header="Действие"
+        style="width:25%"
+      >
+        <template #body="slotProps">
+          <Button @click="openUserModal(slotProps.data.id)">
+            Открыть
+          </Button>
+        </template>
+      </Column>
+      <Column
         header="Имя"
         style="width:25%"
       >
@@ -47,19 +57,33 @@
     >
       {{ error.message }}
     </Message>
+    <Dialog
+      v-model:visible="displayModal"
+      header=""
+      :style="{width: '75vw'}"
+      :modal="true"
+      position="top"
+    >
+      <UserModal v-model:selectedId="selectedId" />
+    </Dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, watch, computed, reactive } from 'vue'
+import { defineComponent, ref, Ref, computed } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
 import { UserListItem } from './types'
+import UserModal from './UserModal.vue'
 
 export default defineComponent({
+    components: {UserModal},
     setup() {
+      let displayModal: Ref<boolean> = ref(false)
+
       const selected = ref()
+      const selectedId: Ref<string> = ref("")
       const search: Ref<string> = ref("")
       const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
       
@@ -78,10 +102,15 @@ export default defineComponent({
         return users.value ? users.value.filter((e:UserListItem) => e.fullName.includes(search.value)) : []
       })
 
-      return { 
-        userFiltered, error, loading, selected, search, filter, 
+      const openUserModal = (id: string) => {
+        selectedId.value = id
+        displayModal.value = true
       }
-    },
+
+      return { 
+        userFiltered, error, loading, selected, search, filter, openUserModal, displayModal, selectedId
+      }
+    }
 })
 </script>
 

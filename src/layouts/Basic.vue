@@ -39,8 +39,6 @@ export default defineComponent({
       isMenuVisible.value = false
       router.push(to)
     }
-
-
     const menu = ref([
       {
         label: 'Главная',
