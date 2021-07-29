@@ -1,21 +1,24 @@
 import store from '@/store'
 import axios from 'axios'
 import { RequestConfig, ViAxiosResponse } from './types'
+import router from '@/router'
+
 
 axios.interceptors.request.use(config => {
   const token: string = store.getters.getRefreshToken
-  if (token) {
-    config.headers.Authorization = token
+  if (token && config.url != '/api/internal/auth/login') {
+    config.headers.Authorization = `Bearer ${token}`
   }
   return config
 })
 
-axios.interceptors.response.use((response) => {
+axios.interceptors.response.use(function (response) {
   if (response?.data?.accessToken) {
     store.dispatch('setRefreshToken', response?.data?.accessToken)
   }
-  return response
-})
+  return response;
+});
+
 
 const ViAxios = async <T>(requestConfig: RequestConfig): Promise<ViAxiosResponse> => {
   let headers = { 'Content-Type': 'application/json' }
@@ -38,8 +41,11 @@ const ViAxios = async <T>(requestConfig: RequestConfig): Promise<ViAxiosResponse
   }
   let isSuccess = true
   const response = await axios(options).catch(error => {
+    if (error.response.status === 401) {
+      router.push('/')
+    }
     isSuccess = false
-    error.code = error.response.code
+    error.code = error.response.status
     error.message = error.response.message
     return error.response
   })

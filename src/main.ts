@@ -18,6 +18,9 @@ import Dialog from 'primevue/dialog'
 import ProgressSpinner from 'primevue/progressspinner';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import Toolbar from 'primevue/toolbar';
+import Dropdown from 'primevue/dropdown';
+import Calendar from 'primevue/calendar';
 
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
@@ -26,7 +29,18 @@ import 'primevue/resources/themes/arya-purple/theme.css'
 const app = createApp(App)
 app.use(store)
 app.use(router)
-app.use(PrimeVue)
+app.use(PrimeVue, {
+    locale: {
+        dayNames: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+        dayNamesShort: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+        dayNamesMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+        monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+        monthNamesShort: ["Ян", "Фев", "Мар", "Апр", "Май", "Июн","Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+        today: 'Сегодня',
+        weekHeader: 'Вых',
+        dateFormat: 'mm.dd.yy',
+    }
+})
 
 
 app.component('Message', Message)
@@ -42,5 +56,8 @@ app.component('Dialog', Dialog)
 app.component('ProgressSpinner', ProgressSpinner)
 app.component('TabView', TabView)
 app.component('TabPanel', TabPanel)
+app.component('Toolbar', Toolbar)
+app.component('Dropdown', Dropdown)
+app.component('Calendar', Calendar)
 
 app.mount('#app')

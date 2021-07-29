@@ -15,7 +15,7 @@
       ><i class="pi pi-bars" /></a>
     </div>
     <div class="top-menu__profile top-menu__item">
-      <a class="vi-title">Администратор</a>
+      <a class="vi-title">{{ userData.fullName }}</a>
     </div>
   </div>
   <div class="basic-content">
@@ -31,9 +31,34 @@
 import { defineComponent, ref } from 'vue'
 import { useRoute } from "vue-router"
 import router from '@/router'
-
+import gql from 'graphql-tag'
+import { useQuery, useResult } from '@vue/apollo-composable';
+import ViAxios from '@/modules/ViAxios'
 export default defineComponent({
   setup () {
+    type UserDataType = {
+      id: string,
+      fullName: string,
+    }
+    const userData = ref(ViAxios<UserDataType>({
+      method: 'get',
+      url: '/api/user/profile',
+    }))
+    ///api/user/profile
+      //       const { result, loading } = useQuery(gql`
+      // query getUser($id: UUID!) {
+      //     user(id: $id) {
+      //         id
+      //         fullName
+      //         serviceNumbers {
+      //           position,
+      //           bid
+      //         }
+      //     }
+      // }`, () => ({
+      //     id: selected.value
+      // }))
+
     const isMenuVisible = ref(false)
     const routeMenu = (to: string) => {
       isMenuVisible.value = false
@@ -83,7 +108,8 @@ export default defineComponent({
         ]
       }
     ])
-    return { menu, isMenuVisible }
+    console.log('1us1', userData.value)
+    return { menu, isMenuVisible, userData }
   },
   computed: {
     pageTitle() {

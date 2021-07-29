@@ -1,5 +1,22 @@
 <template>
   <div class="user-wrapp">
+    <Toolbar class="p-mb-4">
+      <template #left>
+        <Button
+          label="Создать"
+          icon="pi pi-plus"
+          class="p-button-success p-mr-2"
+          @click="openModal('new')"
+        />
+        <!-- <Button label="Delete" icon="pi pi-trash" class="p-button-danger" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" /> -->
+      </template>
+
+      <!-- <template #right>
+          <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block" />
+          <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  />
+      </template> -->
+    </Toolbar>
+
     <DataTable
       v-model:filters="filter"
       v-model:selection="selected"
@@ -34,7 +51,7 @@
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.orderDate }}</span>
+          <span class="image-text">{{ formatDateStr(slotProps.data.orderDate) }}</span>
         </template>
       </Column>
       <Column
@@ -43,6 +60,14 @@
       >
         <template #body="slotProps">
           <span class="image-text">{{ slotProps.data.time }}</span>
+        </template>
+      </Column>
+      <Column
+        header="Аптека"
+        style="width:25%"
+      >
+        <template #body="slotProps">
+          <span class="image-text">{{ slotProps.data.pharm.id }}</span>
         </template>
       </Column>
       <Column
@@ -63,22 +88,40 @@
     >
       {{ error.message }}
     </Message>
+    <Dialog
+      v-model:visible="displayModal"
+      header=""
+      :style="{width: '75vw'}"
+      :modal="true"
+      position="top"
+    >
+      <OrderModal
+        v-model:selectedId="selectedId"
+        @orderSaved="orderSaved"
+      />
+    </Dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, computed } from 'vue'
+import { defineComponent, ref, Ref, computed, watch } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
+import OrderModal from './OrderModal.vue'
+import { formatDateStr } from '@/modules/ViHelper/DateHelper'
+
 
 export default defineComponent({
+    components: {OrderModal},
     setup() {
+      const selectedId: Ref<string> = ref("new")
+      const displayModal: Ref<boolean> = ref(false)
       const selected = ref()
       const search: Ref<string> = ref("")
       const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
       
-      const { result, loading, error  } = useQuery(gql`
+      const { result, loading, error, refetch } = useQuery(gql`
         query getOrders {
           orders {
             id,
@@ -88,6 +131,9 @@ export default defineComponent({
                     id,
                     fullName
                 }
+            },
+            pharm {
+              id
             },
             status,
             orderDate,
@@ -100,9 +146,21 @@ export default defineComponent({
       const orderFiltered = computed(() => {
         return orders.value ? orders.value.filter((e: any) => e.serviceNumber.user.fullName.includes(search.value)) : []
       })
+  
+      const openModal = (typeModal: string) => {
+        displayModal.value = true
+        selectedId.value = typeModal
+      }
+
+      const orderSaved = () => {
+        displayModal.value = false
+        refetch()
+      }
+
 
       return { 
-        orderFiltered, error, loading, selected, search, filter, 
+        orderFiltered, error, loading, selected, search, filter, selectedId, openModal, 
+        displayModal, orderSaved, refetch, formatDateStr
       }
     },
 })

@@ -3,7 +3,8 @@ type RefreshTokenState = {
     refreshToken: string
 }
 const state: RefreshTokenState = {
-  refreshToken: ''
+
+  refreshToken: window.localStorage.getItem('refreshToken') ?? '',
 }
 
 const getters = {
@@ -14,6 +15,7 @@ const getters = {
 
 const mutations = {
   mutateRefreshToken (state: RefreshTokenState, newRefreshToken: string) {
+    localStorage.setItem('refreshToken', newRefreshToken)
     state.refreshToken = newRefreshToken
   }
 }
