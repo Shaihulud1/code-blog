@@ -21,6 +21,7 @@ import TabPanel from 'primevue/tabpanel';
 import Toolbar from 'primevue/toolbar';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
+import Menubar from 'primevue/menubar';
 
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
@@ -59,5 +60,6 @@ app.component('TabPanel', TabPanel)
 app.component('Toolbar', Toolbar)
 app.component('Dropdown', Dropdown)
 app.component('Calendar', Calendar)
+app.component('Menubar', Menubar)
 
 app.mount('#app')

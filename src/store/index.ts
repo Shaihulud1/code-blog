@@ -1,8 +1,10 @@
 import Vuex, { createStore } from 'vuex'
 import RefreshToken from './modules/RefreshToken'
+import UserData from './modules/UserData'
 
 export default new Vuex.Store({
   modules: {
-    RefreshToken
+    RefreshToken,
+    UserData
   }
 })

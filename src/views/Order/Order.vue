@@ -5,16 +5,17 @@
         <Button
           label="Создать"
           icon="pi pi-plus"
-          class="p-button-success p-mr-2"
+          class="p-button-success p-mr-2 order-controll"
           @click="openModal('new')"
         />
-        <!-- <Button label="Delete" icon="pi pi-trash" class="p-button-danger" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" /> -->
+        <Button
+          label="Удалить"
+          icon="pi pi-trash"
+          class="p-button-danger order-controll"
+          :disabled="cantDelete"
+          @click="deleteOrder"
+        />
       </template>
-
-      <!-- <template #right>
-          <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block" />
-          <Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  />
-      </template> -->
     </Toolbar>
 
     <DataTable
@@ -44,6 +45,14 @@
       >
         <template #body="slotProps">
           <span class="image-text">{{ slotProps.data.serviceNumber.user.fullName }}</span>
+        </template>
+      </Column>
+      <Column
+        header="Создатель"
+        style="width:25%"
+      >
+        <template #body="slotProps">
+          <span class="image-text">{{ slotProps.data.initiator.fullName }}</span>
         </template>
       </Column>
       <Column
@@ -110,7 +119,8 @@ import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
 import OrderModal from './OrderModal.vue'
 import { formatDateStr } from '@/modules/ViHelper/DateHelper'
-
+import store from '@/store'
+import ViAxios from '@/modules/ViAxios';
 
 export default defineComponent({
     components: {OrderModal},
@@ -126,11 +136,11 @@ export default defineComponent({
           orders {
             id,
             serviceNumber {
+              id,
+              user {
                 id,
-                user {
-                    id,
-                    fullName
-                }
+                fullName
+              }
             },
             pharm {
               id
@@ -138,6 +148,10 @@ export default defineComponent({
             status,
             orderDate,
             time,
+            initiator {
+              id,
+              fullName
+            }
           }
         }
       `)
@@ -156,16 +170,38 @@ export default defineComponent({
         displayModal.value = false
         refetch()
       }
+      const deleteOrder = async () => {
+        await ViAxios({
+          method: 'post',
+          url: '/api/orders/delete',
+          body: {  
+              orderId: selected.value.id,
+          }
+        })
+        refetch()
+      }
+
+      const currentUser = store.getters.getUserData
+
+  
+
+      const cantDelete = ref(true)
+      watch(selected, (newValue) => {
+        cantDelete.value = newValue.initiator.id !== currentUser.id
+      })
 
 
       return { 
         orderFiltered, error, loading, selected, search, filter, selectedId, openModal, 
-        displayModal, orderSaved, refetch, formatDateStr
+        displayModal, orderSaved, refetch, formatDateStr, deleteOrder, currentUser, cantDelete
       }
     },
+    
 })
 </script>
 
 <style>
-
+.order-controll {
+  margin-right: 20px;
+}
 </style>

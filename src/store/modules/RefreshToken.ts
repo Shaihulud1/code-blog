@@ -1,9 +1,7 @@
-
 type RefreshTokenState = {
-    refreshToken: string
+  refreshToken: string
 }
 const state: RefreshTokenState = {
-
   refreshToken: window.localStorage.getItem('refreshToken') ?? '',
 }
 

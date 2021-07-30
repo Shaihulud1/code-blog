@@ -15,7 +15,11 @@
       ><i class="pi pi-bars" /></a>
     </div>
     <div class="top-menu__profile top-menu__item">
-      <a class="vi-title">{{ userData.fullName }}</a>
+      <a class="vi-title menu-text">{{ userData?.fullName }}</a>
+      <a
+        class="vi-text menu-text"
+        @click="logOut"
+      >Выйти</a>
     </div>
   </div>
   <div class="basic-content">
@@ -28,36 +32,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, Ref, onMounted } from 'vue'
 import { useRoute } from "vue-router"
 import router from '@/router'
-import gql from 'graphql-tag'
-import { useQuery, useResult } from '@vue/apollo-composable';
 import ViAxios from '@/modules/ViAxios'
+import store from '@/store'
+
 export default defineComponent({
   setup () {
     type UserDataType = {
       id: string,
       fullName: string,
     }
-    const userData = ref(ViAxios<UserDataType>({
-      method: 'get',
-      url: '/api/user/profile',
-    }))
-    ///api/user/profile
-      //       const { result, loading } = useQuery(gql`
-      // query getUser($id: UUID!) {
-      //     user(id: $id) {
-      //         id
-      //         fullName
-      //         serviceNumbers {
-      //           position,
-      //           bid
-      //         }
-      //     }
-      // }`, () => ({
-      //     id: selected.value
-      // }))
+    const userData = ref()
+    const getUserData = async () => {
+      const req = await ViAxios<UserDataType>({
+        method: 'get',
+        url: '/api/user/profile',
+      })
+      userData.value = await req.response
+      await store.dispatch('setUserData', userData.value)
+    }
+    onMounted(getUserData)
 
     const isMenuVisible = ref(false)
     const routeMenu = (to: string) => {
@@ -108,8 +104,12 @@ export default defineComponent({
         ]
       }
     ])
-    console.log('1us1', userData.value)
-    return { menu, isMenuVisible, userData }
+    const logOut = () => {
+      store.dispatch('setRefreshToken', "")
+      store.dispatch('setUserData', undefined)
+      router.push('/')
+    }
+    return { menu, isMenuVisible, userData, getUserData, logOut }
   },
   computed: {
     pageTitle() {
@@ -162,4 +162,7 @@ export default defineComponent({
 			grid-auto-flow: column;
 		}
 	}
+  .menu-text {
+    margin-left: 20px;
+  }
 </style>
