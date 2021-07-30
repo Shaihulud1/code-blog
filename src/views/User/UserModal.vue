@@ -11,19 +11,19 @@
         <TabPanel header="Общая информация">
           <div class="info">
             <div class="info__item">
-              Имя : Имя
+              Имя : {{ user.fullName }}
             </div>
             <div class="info__item">
-              Телефон : 05.05.1999
+              Телефон : {{ user.phone }}
             </div>
             <div class="info__item">
-              Дата рождения : 05.05.1999
+              Дата рождения : {{ formatDateStr(user.dateOfBirth) }}
             </div>
             <div class="info__item">
-              Создан : 05.05.2021
+              Создан : {{ formatDateStr(user.createdAt) }}
             </div>
             <div class="info__item">
-              Обновлен : 05.05.2020
+              Обновлен : {{ formatDateStr(user.updatedAt) }}
             </div>
           </div>
         </TabPanel>
@@ -48,6 +48,7 @@
 import { defineComponent, ref } from 'vue'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
+import { formatDateStr } from '@/modules/ViHelper/DateHelper'
 
 export default defineComponent({
     props: {
@@ -58,12 +59,16 @@ export default defineComponent({
         const { result, loading } = useQuery(gql`
         query getUser($id: UUID!) {
             user(id: $id) {
-                id
-                fullName
+                id,
+                fullName,
+                dateOfBirth,
+                updatedAt,
+                createdAt,
                 serviceNumbers {
                   position,
                   bid
-                }
+                },
+                phone
             }
         }`, () => ({
             id: selected.value
@@ -72,7 +77,7 @@ export default defineComponent({
 
         const activeTab = ref(0)
 
-        return { user, loading, activeTab }
+        return { user, loading, activeTab, formatDateStr }
     },
     watch: {
         selectedId(val) {

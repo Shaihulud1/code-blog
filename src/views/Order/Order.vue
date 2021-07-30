@@ -84,7 +84,7 @@
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ slotProps.data.status }}</span>
+          <span class="image-text">{{ getRusStatus(slotProps.data.status) }}</span>
         </template>
       </Column>
       <template #empty>
@@ -121,6 +121,7 @@ import OrderModal from './OrderModal.vue'
 import { formatDateStr } from '@/modules/ViHelper/DateHelper'
 import store from '@/store'
 import ViAxios from '@/modules/ViAxios';
+import { getRusStatus } from '@/modules/ViHelper/StatusHelper'
 
 export default defineComponent({
     components: {OrderModal},
@@ -183,17 +184,19 @@ export default defineComponent({
 
       const currentUser = store.getters.getUserData
 
-  
-
       const cantDelete = ref(true)
       watch(selected, (newValue) => {
+        if (!newValue?.initiator) {
+          return
+        }
         cantDelete.value = newValue.initiator.id !== currentUser.id
       })
 
 
       return { 
         orderFiltered, error, loading, selected, search, filter, selectedId, openModal, 
-        displayModal, orderSaved, refetch, formatDateStr, deleteOrder, currentUser, cantDelete
+        displayModal, orderSaved, refetch, formatDateStr, deleteOrder, currentUser, cantDelete,
+        getRusStatus
       }
     },
     
