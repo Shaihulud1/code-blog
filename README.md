@@ -1,24 +1,19 @@
-# project
+# Админ панель стафингового приложения
 
-## Project setup
-```
-yarn install
-```
+## Требования
+npm >= 7.0 , node >= 16.5.0, yarn >= 1.22.10
 
-### Compiles and hot-reloads for development
+## Запуск
+Склонировать репозиторий, зайти в корень прописать yarn install.
+Чтобы админка стучалась в нужный бекенд, нужно создать .env файл в конфиг и прописать туда: 
+VUE_APP_API_HOST=ВАШ_ХОСТ
+
+### Запуск дев сервера
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
+### Компиляция боевого сервака
 ```
 yarn build
 ```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
