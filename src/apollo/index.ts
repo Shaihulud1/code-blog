@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 
 // HTTP connection to the API
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3001/api/graphql_dev',
+  uri: (process.env?.VUE_APP_API_HOST ?? 'http://localhost:3001') + '/api/graphql_dev',
 })
 
 const cache = new InMemoryCache()
