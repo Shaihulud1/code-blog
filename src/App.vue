@@ -17,13 +17,14 @@ export default {
         provide(ApolloClients, {
             default: apolloClient,
         })
-        console.log('setup')
+        document.title = 'Админ панель'
     },
     computed: {
         layout(): string {
             const route = useRoute();
             return route.meta?.layout ? "Auth" : "Basic";
-        }
+        },
+
     }
 };
 </script>

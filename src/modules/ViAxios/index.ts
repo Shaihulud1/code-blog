@@ -34,7 +34,7 @@ const ViAxios = async <T>(requestConfig: RequestConfig): Promise<ViAxiosResponse
   }
   const options = {
     method: requestConfig.method,
-    baseURL: 'http://localhost:3001',
+    baseURL: process.env?.VUE_APP_API_HOST ?? 'http://localhost:3001',
     url: url,
     headers: headers,
     data: requestConfig.body ? JSON.stringify(requestConfig.body) : ''
