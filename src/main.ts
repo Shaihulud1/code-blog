@@ -22,6 +22,7 @@ import Toolbar from 'primevue/toolbar';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 import Menubar from 'primevue/menubar';
+import Badge from 'primevue/badge';
 
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
@@ -61,5 +62,6 @@ app.component('Toolbar', Toolbar)
 app.component('Dropdown', Dropdown)
 app.component('Calendar', Calendar)
 app.component('Menubar', Menubar)
+app.component('Badge', Badge)
 
 app.mount('#app')

@@ -15,6 +15,13 @@
           :disabled="cantDelete"
           @click="deleteOrder"
         />
+        <Button
+          label="Открыть"
+          icon="pi pi-trash"
+          class="p-button-info order-controll"
+          :disabled="cantDelete"
+          @click="openModal(selected.id)"
+        />
       </template>
     </Toolbar>
 
@@ -84,7 +91,19 @@
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">{{ getRusStatus(slotProps.data.status) }}</span>
+          <span class="image-text">
+            <StatusBadge :code="slotProps.data.status" />
+          </span>
+        </template>
+      </Column>
+      <Column
+        header="Описание"
+        style="width:25%"
+      >
+        <template #body="slotProps">
+          <span class="image-text">
+            {{ slotProps.data.checkinOrder.description }}
+          </span>
         </template>
       </Column>
       <template #empty>
@@ -122,9 +141,10 @@ import { formatDateStr } from '@/modules/ViHelper/DateHelper'
 import store from '@/store'
 import ViAxios from '@/modules/ViAxios';
 import { getRusStatus } from '@/modules/ViHelper/StatusHelper'
+import StatusBadge from './StatusBadge.vue'
 
 export default defineComponent({
-    components: {OrderModal},
+    components: {OrderModal, StatusBadge},
     setup() {
       const selectedId: Ref<string> = ref("new")
       const displayModal: Ref<boolean> = ref(false)
@@ -134,7 +154,7 @@ export default defineComponent({
       
       const { result, loading, error, refetch } = useQuery(gql`
         query getOrders {
-          orders {
+          orders(orderBy: [ORDER_DATE_DESC]){
             id,
             serviceNumber {
               id,
@@ -152,6 +172,9 @@ export default defineComponent({
             initiator {
               id,
               fullName
+            },
+            checkinOrder {
+              description
             }
           }
         }

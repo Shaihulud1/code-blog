@@ -93,16 +93,20 @@
             {{ message }}
           </Message>
         </div>
+        <div>
+          {{ orderEdit }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import gql from 'graphql-tag'
 import ViAxios from '@/modules/ViAxios'
 import { useQuery, useResult } from '@vue/apollo-composable';
+// import { timeSeparate } from '@/modules/ViHelper/'
 
 export default defineComponent({
     props: {
@@ -142,9 +146,101 @@ export default defineComponent({
         const timeTo = ref("")
         const orderDate = ref("")
         const description = ref("")
-
+      
         const errors = ref([])
         const loading = ref(false)
+        if (selected.value !== 'new') {
+          // const { result, loading } = useQuery(gql`
+          //   query getUser($id: UUID!) {
+          //       user(id: $id) {
+          //           id,
+          //           fullName,
+          //           dateOfBirth,
+          //           updatedAt,
+          //           createdAt,
+          //           serviceNumbers {
+          //             position,
+          //             bid
+          //           },
+          //           phone
+          //       }
+          //   }`, () => ({
+          //       id: selected.value
+          //   })
+          // )
+          // const user = useResult(result)
+            // const { result: orderEditResult, loading: orderLoading } = useQuery(gql`
+            //     query getOrder($id: UUID!) {
+            //       order(id: $id) {
+            //         id,
+            //         serviceNumber {
+            //           id,
+            //           position,
+            //           user {
+            //             id,
+            //             fullName
+            //           }
+            //         },
+            //         time,
+            //         orderDate,
+            //         checkinOrder {
+            //           description
+            //         }
+            //         pharm {
+            //           id
+            //         }
+            //       }
+            //     }
+            // `, () => ({
+            //   id: selected.value
+            // }))
+            // const orderEdit  = useResult(orderEditResult)
+            // description.value = orderEditResult.id
+            // console.log(orderEdit.id)
+
+            //console.log('oer', orderEditResult.checkinOrder)
+            // description.value = orderEditResult.checkinOrder.description
+        }
+      
+        const { result: orderEditResult, loading: orderLoading } = useQuery(gql`
+            query getOrder($id: UUID!) {
+              order(id: $id) {
+                id,
+                serviceNumber {
+                  id,
+                  position,
+                  user {
+                    id,
+                    fullName
+                  }
+                },
+                time,
+                orderDate,
+                checkinOrder {
+                  description
+                }
+                pharm {
+                  id
+                }
+              }
+            }
+        `, () => ({
+          id: selected.value
+        }))
+        const orderEdit  = ref(useResult(orderEditResult))
+        watch(orderLoading, (newValue) => {
+          if (!newValue) {
+            selectedSN.value = orderEdit.value.serviceNumber
+            selectedPharm.value = orderEdit.value.pharm
+            orderDate.value = orderEdit.value.orderDate
+          }
+        })
+        console.log(orderEdit)
+      //  selectedSN.value = orderEdit.value.serviceNumber
+      //   selectedPharm.value = orderEdit.value.pharm
+        // // const timeAt = ref("")
+        // // const timeTo = ref("")
+        // description.value = orderEdit.value.checkinOrder.description
 
         const createOrder = async () => {
             errors.value = []
@@ -189,7 +285,7 @@ export default defineComponent({
         return { loadingSNSelect, snSelect, snLabel,
             pharmsSelect, selectedSN, selectedPharm, 
             orderDate, timeAt, timeTo, loadingPharmSelect,
-            description, errors, createOrder, loading
+            description, errors, createOrder, loading, orderEdit
         }
     },
 

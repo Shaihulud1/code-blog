@@ -24,5 +24,6 @@ export const getRusStatus = (status: string) => {
             rusStatus = 'Подвешен'
             break
     }
+    rusStatus = `<Badge :value="getRusStatus(slotProps.data.status)" severity="success"></Badge>`
     return rusStatus
 }
