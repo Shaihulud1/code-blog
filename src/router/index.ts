@@ -59,6 +59,14 @@ const routes: Route[] = [
       title: 'События'
     },
     component: () => import('../views/Event/Event.vue')
+  },
+  {
+    path: '/imports',
+    name: 'Import',
+    meta: {
+      title: 'Импорты'
+    },
+    component: () => import('../views/Import/Import.vue')
   }
 ]
 

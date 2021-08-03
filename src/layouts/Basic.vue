@@ -100,6 +100,13 @@ export default defineComponent({
             command:() => { 
               routeMenu('/events')
             }
+          },
+          {
+            label: 'Импорты',
+            icon: 'pi pi-fw pi-cloud-download',
+            command:() => { 
+              routeMenu('/imports')
+            }
           }
         ]
       }

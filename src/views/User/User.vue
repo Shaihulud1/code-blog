@@ -87,7 +87,7 @@ export default defineComponent({
       const search: Ref<string> = ref("")
       const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
       
-      const { result, loading, error  } = useQuery(gql`
+      const { result, loading, error, refetch  } = useQuery(gql`
         query getUsers {
           users {
             id,
@@ -96,8 +96,8 @@ export default defineComponent({
           }
         }
       `)
+      refetch()
       let users = useResult(result)
-
       const userFiltered = computed(() => {
         return users.value ? users.value.filter((e:UserListItem) => e.fullName.includes(search.value)) : []
       })

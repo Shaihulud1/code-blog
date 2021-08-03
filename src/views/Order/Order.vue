@@ -156,6 +156,7 @@ export default defineComponent({
           }
         }
       `)
+      refetch()
       let orders = useResult(result)
 
       const orderFiltered = computed(() => {

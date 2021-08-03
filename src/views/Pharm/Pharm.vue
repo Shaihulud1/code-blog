@@ -59,7 +59,7 @@ export default defineComponent({
       const selected = ref()
       const search: Ref<string> = ref("")
       
-      const { result, loading, error  } = useQuery(gql`
+      const { result, loading, error, refetch  } = useQuery(gql`
         query getPharms {
           pharms {
             id,
@@ -67,6 +67,7 @@ export default defineComponent({
           }
         }
       `)
+      refetch()
       const pharms = useResult(result)
 
       const pharmFiltered = computed(() => {
