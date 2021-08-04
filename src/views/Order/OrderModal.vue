@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      v-if="loading"
+      v-if="modalLoading"
       class="loader-wrapper"
     >
       <ProgressSpinner />
@@ -79,7 +79,10 @@
             type="text"
           />
         </div>
-        <div class="p-field form-edit__item">
+        <div
+          v-if="canSave"
+          class="p-field form-edit__item"
+        >
           <Button
             label="Сохранить"
             @click="createOrder()"
@@ -93,9 +96,6 @@
             {{ message }}
           </Message>
         </div>
-        <div>
-          {{ orderEdit }}
-        </div>
       </div>
     </div>
   </div>
@@ -106,7 +106,8 @@ import { defineComponent, ref, watch } from 'vue'
 import gql from 'graphql-tag'
 import ViAxios from '@/modules/ViAxios'
 import { useQuery, useResult } from '@vue/apollo-composable';
-// import { timeSeparate } from '@/modules/ViHelper/'
+import { timeSeparate } from '@/modules/ViHelper/DateHelper'
+import store from '@/store'
 
 export default defineComponent({
     props: {
@@ -149,60 +150,8 @@ export default defineComponent({
       
         const errors = ref([])
         const loading = ref(false)
-        if (selected.value !== 'new') {
-          // const { result, loading } = useQuery(gql`
-          //   query getUser($id: UUID!) {
-          //       user(id: $id) {
-          //           id,
-          //           fullName,
-          //           dateOfBirth,
-          //           updatedAt,
-          //           createdAt,
-          //           serviceNumbers {
-          //             position,
-          //             bid
-          //           },
-          //           phone
-          //       }
-          //   }`, () => ({
-          //       id: selected.value
-          //   })
-          // )
-          // const user = useResult(result)
-            // const { result: orderEditResult, loading: orderLoading } = useQuery(gql`
-            //     query getOrder($id: UUID!) {
-            //       order(id: $id) {
-            //         id,
-            //         serviceNumber {
-            //           id,
-            //           position,
-            //           user {
-            //             id,
-            //             fullName
-            //           }
-            //         },
-            //         time,
-            //         orderDate,
-            //         checkinOrder {
-            //           description
-            //         }
-            //         pharm {
-            //           id
-            //         }
-            //       }
-            //     }
-            // `, () => ({
-            //   id: selected.value
-            // }))
-            // const orderEdit  = useResult(orderEditResult)
-            // description.value = orderEditResult.id
-            // console.log(orderEdit.id)
-
-            //console.log('oer', orderEditResult.checkinOrder)
-            // description.value = orderEditResult.checkinOrder.description
-        }
-      
-        const { result: orderEditResult, loading: orderLoading } = useQuery(gql`
+          
+        const { result: orderEditResult, loading: orderLoading, refetch } = useQuery(gql`
             query getOrder($id: UUID!) {
               order(id: $id) {
                 id,
@@ -214,6 +163,9 @@ export default defineComponent({
                     fullName
                   }
                 },
+                initiator {
+                  id
+                }
                 time,
                 orderDate,
                 checkinOrder {
@@ -227,20 +179,25 @@ export default defineComponent({
         `, () => ({
           id: selected.value
         }))
-        const orderEdit  = ref(useResult(orderEditResult))
-        watch(orderLoading, (newValue) => {
-          if (!newValue) {
+        refetch()
+        const orderEdit = ref(useResult(orderEditResult))
+
+        const fillFields = () => {
+          if (orderEdit.value) {
             selectedSN.value = orderEdit.value.serviceNumber
             selectedPharm.value = orderEdit.value.pharm
             orderDate.value = orderEdit.value.orderDate
+            const timeSeparated = timeSeparate(orderEdit.value.time)
+            timeAt.value = timeSeparated[0]
+            timeTo.value = timeSeparated[1]
+            description.value = orderEdit.value.checkinOrder.description
           }
+        }
+        
+        watch(orderLoading, (newValueLoading) => {
+          fillFields()
         })
-        console.log(orderEdit)
-      //  selectedSN.value = orderEdit.value.serviceNumber
-      //   selectedPharm.value = orderEdit.value.pharm
-        // // const timeAt = ref("")
-        // // const timeTo = ref("")
-        // description.value = orderEdit.value.checkinOrder.description
+        fillFields()
 
         const createOrder = async () => {
             errors.value = []
@@ -265,8 +222,9 @@ export default defineComponent({
             loading.value = true
             const orderRequest = await ViAxios({
                 method: 'post',
-                url: '/api/orders/create',
+                url: selected.value !== 'new' ? '/api/orders/create' : '/api/orders/update',
                 body: {  
+                    orderId: selected.value,
                     pharm: selectedPharm.value.id,
                     serviceNumber: selectedSN.value.id,
                     time: `${timeAt.value.getHours()}:${timeAt.value.getMinutes()}-${timeTo.value.getHours()}:${timeTo.value.getMinutes()}`,
@@ -282,11 +240,26 @@ export default defineComponent({
             loading.value = false
         }
 
+        const currentUser = store.getters.getUserData
+
         return { loadingSNSelect, snSelect, snLabel,
             pharmsSelect, selectedSN, selectedPharm, 
             orderDate, timeAt, timeTo, loadingPharmSelect,
-            description, errors, createOrder, loading, orderEdit
+            description, errors, createOrder, loading, orderEdit,
+            orderLoading, currentUser
         }
+    },
+    computed: {
+      modalLoading() {
+        return this.orderLoading.value || this.loading.value
+      },
+      canSave() {
+        let canSave = this.selectedId === 'new'
+        if (!canSave && this.orderEdit) {
+          canSave = this.orderEdit.initiator.id === this.currentUser.id 
+        }
+        return canSave
+      }
     },
 
 })
