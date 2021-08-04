@@ -69,6 +69,7 @@
           <Calendar
             id="date"
             v-model="orderDate"
+            date-format="dd.mm.yy"
           />
         </div>
         <div class="p-field form-edit__item">
@@ -106,7 +107,7 @@ import { defineComponent, ref, watch } from 'vue'
 import gql from 'graphql-tag'
 import ViAxios from '@/modules/ViAxios'
 import { useQuery, useResult } from '@vue/apollo-composable';
-import { timeSeparate } from '@/modules/ViHelper/DateHelper'
+import { timeSeparate, timeJoin, formatDateStr, dateStrToJSDate } from '@/modules/ViHelper/DateHelper'
 import store from '@/store'
 
 export default defineComponent({
@@ -186,15 +187,15 @@ export default defineComponent({
           if (orderEdit.value) {
             selectedSN.value = orderEdit.value.serviceNumber
             selectedPharm.value = orderEdit.value.pharm
-            orderDate.value = orderEdit.value.orderDate
+            orderDate.value = formatDateStr(orderEdit.value.orderDate)
             const timeSeparated = timeSeparate(orderEdit.value.time)
             timeAt.value = timeSeparated[0]
             timeTo.value = timeSeparated[1]
-            description.value = orderEdit.value.checkinOrder.description
+            description.value = orderEdit.value.checkinOrder.description ?? ""
           }
         }
         
-        watch(orderLoading, (newValueLoading) => {
+        watch(orderLoading, () => {
           fillFields()
         })
         fillFields()
@@ -222,13 +223,13 @@ export default defineComponent({
             loading.value = true
             const orderRequest = await ViAxios({
                 method: 'post',
-                url: selected.value !== 'new' ? '/api/orders/create' : '/api/orders/update',
+                url: selected.value === 'new' ? '/api/orders/create' : '/api/orders/update',
                 body: {  
                     orderId: selected.value,
                     pharm: selectedPharm.value.id,
                     serviceNumber: selectedSN.value.id,
-                    time: `${timeAt.value.getHours()}:${timeAt.value.getMinutes()}-${timeTo.value.getHours()}:${timeTo.value.getMinutes()}`,
-                    date: orderDate.value,
+                    time: timeJoin(timeAt.value, timeTo.value),
+                    date: typeof(orderDate.value) === 'string' ? dateStrToJSDate(orderDate.value) : orderDate.value,
                     description: description.value
                 }
             })

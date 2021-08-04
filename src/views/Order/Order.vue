@@ -17,7 +17,7 @@
         />
         <Button
           label="Открыть"
-          icon="pi pi-trash"
+          icon="pi pi-folder-open"
           class="p-button-info order-controll"
           :disabled="cantDelete"
           @click="openModal(selected.id)"
