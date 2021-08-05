@@ -3,14 +3,13 @@
 </template>
 
 <script lang="ts">
-import { provide } from 'vue'
+import { defineComponent, provide } from 'vue'
 import Auth from "./layouts/Auth.vue";
 import Basic from "./layouts/Basic.vue";
 import { useRoute } from "vue-router";
 import apolloClient from './apollo'
 import { ApolloClients } from '@vue/apollo-composable'
-export default {
-
+export default defineComponent ({
     name: "App",
     components: { Auth, Basic },
     setup() {
@@ -26,7 +25,7 @@ export default {
         },
 
     }
-};
+});
 </script>
 
 <style lang="scss">

@@ -1,4 +1,4 @@
-export const getRusStatus = (status: string) => {
+export const getRusStatus = (status: string): string => {
     let rusStatus = 'Неизвестно'
     switch (status)
     {

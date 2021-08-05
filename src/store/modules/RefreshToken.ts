@@ -12,13 +12,13 @@ const getters = {
 }
 
 const mutations = {
-  mutateRefreshToken (state: RefreshTokenState, newRefreshToken: string) {
+  mutateRefreshToken (state: RefreshTokenState, newRefreshToken: string): void {
     localStorage.setItem('refreshToken', newRefreshToken)
     state.refreshToken = newRefreshToken
   }
 }
 const actions = {
-  setRefreshToken (context: any, newRefreshToken: string) {
+  setRefreshToken (context: {commit(mutation: string, object: string): void}, newRefreshToken: string): void {
     context.commit('mutateRefreshToken', newRefreshToken)
   }
 }

@@ -32,13 +32,16 @@ const getters = {
 }
 
 const mutations = {
-    mutateUserData (state: UserDataStateType, newUserdata: UserDataType | undefined) {
+    mutateUserData (state: UserDataStateType, newUserdata: UserDataType | undefined): void {
         localStorage.setItem('userData', JSON.stringify(newUserdata))
         state.userData = newUserdata
     }
 }
 const actions = {
-    setUserData (context: any, newUserdata: UserDataType | undefined) {
+    setUserData (
+        context: {commit(mutation: string, object: UserDataType | undefined): void}, 
+        newUserdata: UserDataType | undefined
+    ): void {
         context.commit('mutateUserData', newUserdata)
     }
 }

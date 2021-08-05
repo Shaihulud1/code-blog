@@ -10,30 +10,17 @@
       <div class="p-fluid form-edit">
         <div class="p-field form-edit__item">
           <label for="employer">Номер сотрудника</label>
-          <Dropdown
-            id="employer"
+          <AutoComplete
             v-model="selectedSN"
-            :options="snSelect"
-            :loading="loadingSNSelect"
-            option-label="id"
-          > 
-            <template #value="slotProps">
-              <div
-                v-if="slotProps.value"
-                class="p-dropdown-car-value"
-              >
-                <span>{{ slotProps.value.user.fullName }} {{ slotProps.value.id }} ({{ slotProps.value.position }})</span>
-              </div>
-              <span v-else>
-                {{ slotProps.placeholder }}
-              </span>
+            :suggestions="searchFilteredVals"
+            field="id"
+            :dropdown="true"
+            @complete="searchServiceNumber($event)"
+          >
+            <template #item="slotProps">
+              <span>{{ slotProps.item.user.fullName }} {{ slotProps.item.id }} ({{ slotProps.item.position }})</span>
             </template>
-            <template #option="slotProps">
-              <div class="p-dropdown-car-option">
-                <span>{{ slotProps.option.user.fullName }} {{ slotProps.option.id }} ({{ slotProps.option.position }})</span>
-              </div>
-            </template>
-          </Dropdown>
+          </AutoComplete>
         </div>
         <div class="p-field form-edit__item">
           <label for="pharm">Аптека</label>
@@ -102,18 +89,22 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, ref, watch } from 'vue'
+<script lang="ts">
+import { defineComponent, ref, watch, Ref, computed } from 'vue'
 import gql from 'graphql-tag'
 import ViAxios from '@/modules/ViAxios'
 import { useQuery, useResult } from '@vue/apollo-composable';
 import { timeSeparate, timeJoin, formatDateStr, dateStrToJSDate } from '@/modules/ViHelper/DateHelper'
 import store from '@/store'
 
-export default defineComponent({
+export default defineComponent ({
     props: {
-        selectedId: String,
+        selectedId: {
+          type: String,
+          default: "new"
+        },
     },
+    emits: ['orderSaved'],
     setup(props, { emit }) {
         const selected = ref(props.selectedId)
         const { result: resultSNSelect, loading: loadingSNSelect } = useQuery(gql`
@@ -129,9 +120,6 @@ export default defineComponent({
             }
         `)
         const snSelect = useResult(resultSNSelect)
-        const snLabel = (e) => {
-            return e.id
-        }
 
         const { result: resultPharmSelect, loading: loadingPharmSelect } = useQuery(gql`
             query getPharms {
@@ -149,7 +137,7 @@ export default defineComponent({
         const orderDate = ref("")
         const description = ref("")
       
-        const errors = ref([])
+        const errors: Ref<string[]> = ref([])
         const loading = ref(false)
           
         const { result: orderEditResult, loading: orderLoading, refetch } = useQuery(gql`
@@ -181,12 +169,12 @@ export default defineComponent({
           id: selected.value
         }))
         refetch()
-        const orderEdit = ref(useResult(orderEditResult))
+        const orderEdit = useResult(orderEditResult)
 
         const fillFields = () => {
           if (orderEdit.value) {
-            selectedSN.value = orderEdit.value.serviceNumber
-            selectedPharm.value = orderEdit.value.pharm
+            selectedSN.value = orderEdit.value.serviceNumber.id
+            selectedPharm.value = orderEdit.value.pharm.id
             orderDate.value = formatDateStr(orderEdit.value.orderDate)
             const timeSeparated = timeSeparate(orderEdit.value.time)
             timeAt.value = timeSeparated[0]
@@ -226,8 +214,8 @@ export default defineComponent({
                 url: selected.value === 'new' ? '/api/orders/create' : '/api/orders/update',
                 body: {  
                     orderId: selected.value,
-                    pharm: selectedPharm.value.id,
-                    serviceNumber: selectedSN.value.id,
+                    pharm: selectedPharm.value,
+                    serviceNumber: selectedSN.value,
                     time: timeJoin(timeAt.value, timeTo.value),
                     date: typeof(orderDate.value) === 'string' ? dateStrToJSDate(orderDate.value) : orderDate.value,
                     description: description.value
@@ -243,26 +231,31 @@ export default defineComponent({
 
         const currentUser = store.getters.getUserData
 
-        return { loadingSNSelect, snSelect, snLabel,
+        const searchFilteredVals = ref([]);
+        
+        const searchServiceNumber = (event: {query: string}) => {
+          searchFilteredVals.value = snSelect.value.filter((e: {user: {fullName: string}, id: string, position: string}) => {
+            const searchField = `${e.user.fullName} ${e.id} ${e.position}`
+            return searchField.includes(event.query)
+          })
+        }
+
+        const modalLoading = computed(() => orderLoading.value || loading.value)
+        const canSave = computed(() => {
+            let canSave = props.selectedId === 'new'
+            if (!canSave && orderEdit.value) {
+              canSave = orderEdit.value.initiator.id === currentUser.id 
+            }
+            return canSave
+        })
+        console.log(String)
+        return { loadingSNSelect, snSelect, canSave,
             pharmsSelect, selectedSN, selectedPharm, 
             orderDate, timeAt, timeTo, loadingPharmSelect,
             description, errors, createOrder, loading, orderEdit,
-            orderLoading, currentUser
+            orderLoading, currentUser, searchServiceNumber, searchFilteredVals, modalLoading
         }
     },
-    computed: {
-      modalLoading() {
-        return this.orderLoading.value || this.loading.value
-      },
-      canSave() {
-        let canSave = this.selectedId === 'new'
-        if (!canSave && this.orderEdit) {
-          canSave = this.orderEdit.initiator.id === this.currentUser.id 
-        }
-        return canSave
-      }
-    },
-
 })
 </script>
 

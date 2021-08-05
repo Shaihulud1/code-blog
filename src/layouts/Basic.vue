@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useRoute } from "vue-router"
 import router from '@/router'
 import ViAxios from '@/modules/ViAxios'

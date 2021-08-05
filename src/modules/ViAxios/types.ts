@@ -8,7 +8,7 @@ export type RequestConfig = {
 
 export type ViAxiosResponse = {
     success: boolean;
-    response: any;
+    response: unknown;
     error?: {
         message: string,
         code: string,

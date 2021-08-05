@@ -1,4 +1,4 @@
-import Vuex, { createStore } from 'vuex'
+import Vuex from 'vuex'
 import RefreshToken from './modules/RefreshToken'
 import UserData from './modules/UserData'
 

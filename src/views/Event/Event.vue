@@ -87,7 +87,9 @@ export default defineComponent({
       const events = useResult(result)
 
       const eventFiltered = computed(() => {
-        return events.value ? events.value.filter((e: any) => e.initiator.fullName.includes(search.value)) : []
+        return events.value ? 
+          events.value.filter((e: {initiator: {fullName: string}}) => e.initiator.fullName.includes(search.value)) : 
+          []
       })
 
       return { 

@@ -1,4 +1,3 @@
-import VueApollo from 'vue-apollo'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -23,6 +22,10 @@ import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 import Menubar from 'primevue/menubar';
 import Badge from 'primevue/badge';
+import AutoComplete from 'primevue/autocomplete';
+import Menu from 'primevue/menu';
+
+
 
 import 'primevue/resources/primevue.min.css'
 import 'primeicons/primeicons.css'
@@ -63,5 +66,7 @@ app.component('Dropdown', Dropdown)
 app.component('Calendar', Calendar)
 app.component('Menubar', Menubar)
 app.component('Badge', Badge)
+app.component('AutoComplete', AutoComplete)
+app.component('Menu', Menu)
 
 app.mount('#app')

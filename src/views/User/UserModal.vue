@@ -44,7 +44,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from 'vue'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
@@ -52,7 +52,10 @@ import { formatDateStr } from '@/modules/ViHelper/DateHelper'
 
 export default defineComponent({
     props: {
-        selectedId: String,
+        selectedId: {
+          type: String,
+          default: 'new'
+        },
     },
     setup(props) {
         const selected = ref(props.selectedId)

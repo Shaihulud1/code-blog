@@ -71,7 +71,7 @@ export default defineComponent({
       const pharms = useResult(result)
 
       const pharmFiltered = computed(() => {
-        return pharms.value ? pharms.value.filter((e: any) => e.id.includes(search.value)) : []
+        return pharms.value ? pharms.value.filter((e: {id:string}) => e.id.includes(search.value)) : []
       })
 
       return { 

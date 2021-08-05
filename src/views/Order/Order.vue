@@ -183,7 +183,8 @@ export default defineComponent({
       let orders = useResult(result)
 
       const orderFiltered = computed(() => {
-        return orders.value ? orders.value.filter((e: any) => e.serviceNumber.user.fullName.includes(search.value)) : []
+        return orders.value ? orders.value.filter(
+          (e: {serviceNumber: {user: {fullName: string}}}) => e.serviceNumber.user.fullName.includes(search.value)) : []
       })
   
       const openModal = (typeModal: string) => {
