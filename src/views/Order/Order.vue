@@ -8,20 +8,6 @@
           class="p-button-success p-mr-2 order-controll"
           @click="openModal('new')"
         />
-        <Button
-          label="Удалить"
-          icon="pi pi-trash"
-          class="p-button-danger order-controll"
-          :disabled="cantDelete"
-          @click="deleteOrder"
-        />
-        <Button
-          label="Открыть"
-          icon="pi pi-folder-open"
-          class="p-button-info order-controll"
-          :disabled="cantDelete"
-          @click="openModal(selected.id)"
-        />
       </template>
     </Toolbar>
 
@@ -46,6 +32,21 @@
           />
         </span>
       </template>
+      <Column>
+        <template #body="slotProps">
+          <Button
+            v-if="canDelete(slotProps.data.initiator.id)"
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-info p-mr-2"
+            @click="openModal(slotProps.data.id)"
+          />
+          <Button
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            @click="deleteOrder(slotProps.data.id)"
+          />
+        </template>
+      </Column>
       <Column
         header="Ответственный"
         style="width:25%"
@@ -196,12 +197,12 @@ export default defineComponent({
         displayModal.value = false
         refetch()
       }
-      const deleteOrder = async () => {
+      const deleteOrder = async (orderId: string) => {
         await ViAxios({
           method: 'post',
           url: '/api/orders/delete',
           body: {  
-              orderId: selected.value.id,
+              orderId,
           }
         })
         refetch()
@@ -209,18 +210,11 @@ export default defineComponent({
 
       const currentUser = store.getters.getUserData
 
-      const cantDelete = ref(true)
-      watch(selected, (newValue) => {
-        if (!newValue?.initiator) {
-          return
-        }
-        cantDelete.value = newValue.initiator.id !== currentUser.id
-      })
-
+      const canDelete = (initiatorId: string): boolean => initiatorId === currentUser.id
 
       return { 
         orderFiltered, error, loading, selected, search, filter, selectedId, openModal, 
-        displayModal, orderSaved, refetch, formatDateStr, deleteOrder, currentUser, cantDelete,
+        displayModal, orderSaved, refetch, formatDateStr, deleteOrder, currentUser, canDelete,
         getRusStatus
       }
     },

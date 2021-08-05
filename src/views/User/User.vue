@@ -22,13 +22,14 @@
         </span>
       </template>
       <Column
-        header="Действие"
-        style="width:25%"
+        style="width:1%"
       >
         <template #body="slotProps">
-          <Button @click="openUserModal(slotProps.data.id)">
-            Открыть
-          </Button>
+          <Button
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-info"
+            @click="openUserModal(slotProps.data.id)"
+          />
         </template>
       </Column>
       <Column
