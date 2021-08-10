@@ -41,13 +41,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref } from 'vue'
+import { defineComponent, ref, Ref, onMounted} from 'vue'
 import ViAxios from '@/modules/ViAxios'
 import { RefreshTokenResponse } from './types'
 import router from '@/router'
 
 export default defineComponent({
   setup () {
+    onMounted( async () => {
+      const req = await ViAxios({
+        method: 'get',
+        url: '/api/user/profile'
+      })
+      if (req.code === 200) {
+        router.push('/main')
+      }
+    })
+
     const phone: Ref<string> = ref('79000000000')
     const password: Ref<string> = ref('Gj2qPUf')
     const errors: Ref<string[]> = ref([])
