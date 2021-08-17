@@ -102,7 +102,10 @@
         style="width:25%"
       >
         <template #body="slotProps">
-          <span class="image-text">
+          <span
+            v-if="slotProps.data?.checkinOrder?.description"
+            class="image-text"
+          >
             {{ slotProps.data.checkinOrder.description }}
           </span>
         </template>
