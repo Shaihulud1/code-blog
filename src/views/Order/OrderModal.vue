@@ -130,8 +130,8 @@ export default defineComponent ({
         `)
         const pharmsSelect = useResult(resultPharmSelect)
 
-        const selectedSN = ref("")
-        const selectedPharm = ref("")
+        const selectedSN = ref({id: ""})
+        const selectedPharm = ref({id: ""})
         const timeAt = ref("")
         const timeTo = ref("")
         const orderDate = ref("")
@@ -173,8 +173,8 @@ export default defineComponent ({
 
         const fillFields = () => {
           if (orderEdit.value) {
-            selectedSN.value = orderEdit.value.serviceNumber.id
-            selectedPharm.value = orderEdit.value.pharm.id
+            selectedSN.value = orderEdit.value.serviceNumber
+            selectedPharm.value = orderEdit.value.pharm
             orderDate.value = formatDateStr(orderEdit.value.orderDate)
             const timeSeparated = timeSeparate(orderEdit.value.time)
             timeAt.value = timeSeparated[0]
@@ -214,8 +214,8 @@ export default defineComponent ({
                 url: selected.value === 'new' ? '/api/orders/create' : '/api/orders/update',
                 body: {  
                     orderId: selected.value,
-                    pharm: selectedPharm.value,
-                    serviceNumber: selectedSN.value,
+                    pharm: selectedPharm.value.id,
+                    serviceNumber: selectedSN.value.id,
                     time: timeJoin(timeAt.value, timeTo.value),
                     date: typeof(orderDate.value) === 'string' ? dateStrToJSDate(orderDate.value) : orderDate.value,
                     description: description.value
