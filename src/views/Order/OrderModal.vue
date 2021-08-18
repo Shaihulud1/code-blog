@@ -34,22 +34,24 @@
         </div>
         <div class="p-field form-edit__item">
           <label for="work-time">Время работы</label>
-          <Calendar
-            id="workTime"
-            v-model="timeAt"
-            :show-time="true"
-            :time-only="true"
-            hour-format="24"
-            placeholder="От"
-          />
-          <Calendar
-            id="workTime"
-            v-model="timeTo"
-            :show-time="true"
-            :time-only="true"
-            hour-format="24"
-            placeholder="До"
-          />
+          <div class="work-time__wrapp">
+            <Calendar
+              id="workTime"
+              v-model="timeAt"
+              :show-time="true"
+              :time-only="true"
+              hour-format="24"
+              placeholder="От"
+            />
+            <Calendar
+              id="workTime"
+              v-model="timeTo"
+              :show-time="true"
+              :time-only="true"
+              hour-format="24"
+              placeholder="До"
+            />
+          </div>
         </div>
         <div class="p-field form-edit__item">
           <label for="date">Дата</label>
@@ -268,4 +270,13 @@ export default defineComponent ({
     .loader-wrapper {
         text-align: center;
     }
+    .work-time
+    {
+      &__wrapp {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 15px;
+      }
+    }
+
 </style>

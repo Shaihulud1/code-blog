@@ -122,8 +122,8 @@
     </Message>
     <Dialog
       v-model:visible="displayModal"
-      header=""
-      :style="{width: '75vw'}"
+      header="Создание смены"
+      :style="{width: '40vw', minWidth: '300px'}"
       :modal="true"
       position="top"
     >
@@ -150,10 +150,10 @@ import StatusBadge from './StatusBadge.vue'
 export default defineComponent({
     components: {OrderModal, StatusBadge},
     setup() {
-      const selectedId: Ref<string> = ref("new")
-      const displayModal: Ref<boolean> = ref(false)
+      const selectedId = ref("new")
+      const displayModal  = ref(false)
       const selected = ref()
-      const search: Ref<string> = ref("")
+      const search = ref("")
       const filter = ref({global: {value: null, matchMode: FilterMatchMode.CONTAINS}});
       
       const { result, loading, error, refetch } = useQuery(gql`
