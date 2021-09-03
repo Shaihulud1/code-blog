@@ -6,22 +6,20 @@
   >
     <PanelMenu :model="menu" />
   </Sidebar>
-
-  <div class="top-menu">
-    <div class="top-menu__menu top-menu__item">
-      <a
-        class="vi-title"
-        @click="isMenuVisible = !isMenuVisible"
-      ><i class="pi pi-bars" /></a>
-    </div>
-    <div class="top-menu__profile top-menu__item">
-      <a class="vi-title menu-text">{{ userData?.fullName }}</a>
-      <a
-        class="vi-text menu-text"
-        @click="logOut"
-      >Выйти</a>
-    </div>
-  </div>
+  <Menubar
+    :model="menu"
+    class="top-menu"
+  >
+    <template #end>
+      <div class="top-menu__profile top-menu__item">
+        <a class="vi-title menu-text">{{ userData?.fullName }}</a>
+        <a
+          class="vi-text menu-text"
+          @click="logOut"
+        >Выйти</a>
+      </div>
+    </template>
+  </Menubar>
   <div class="basic-content">
     <h1 class="content-page-title vi-title">
       {{ pageTitle }}
@@ -84,10 +82,10 @@ export default defineComponent({
         }
       },
       {
-        label: 'Аптеки',
+        label: 'Управление сотрудниками аптеки',
         icon: 'pi pi-fw pi-plus-circle',
         command:() => { 
-          routeMenu('/pharms')
+          routeMenu('/pharm-management')
         }
       },
       {
@@ -147,12 +145,11 @@ export default defineComponent({
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		grid-auto-rows: 60px;
-    background-color: $topBGColor;
+    background-color: $topBGColor !important;
     width: 100vw;
 		&__profile {
 			justify-self: end;
       margin-right: 30px;
-      margin-top: 20px;
 		}
 		&__menu {
       margin-top: 15px;

@@ -10,6 +10,10 @@
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "@babel/parser": "^7.14.8",
+    "@fullcalendar/core": "^5.9.0",
+    "@fullcalendar/daygrid": "^5.9.0",
+    "@fullcalendar/interaction": "^5.9.0",
+    "@fullcalendar/timegrid": "^5.9.0",
     "@vue/apollo-composable": "^4.0.0-alpha.14",
     "apollo": "^2.33.4",
     "apollo-boost": "^0.4.9",

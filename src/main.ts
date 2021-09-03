@@ -24,6 +24,7 @@ import Menubar from 'primevue/menubar';
 import Badge from 'primevue/badge';
 import AutoComplete from 'primevue/autocomplete';
 import Menu from 'primevue/menu';
+import FullCalendar from 'primevue/fullcalendar';
 
 
 
@@ -68,5 +69,6 @@ app.component('Menubar', Menubar)
 app.component('Badge', Badge)
 app.component('AutoComplete', AutoComplete)
 app.component('Menu', Menu)
+app.component('FullCalendar', FullCalendar)
 
 app.mount('#app')

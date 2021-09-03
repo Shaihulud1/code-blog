@@ -53,6 +53,14 @@ const routes: Route[] = [
     component: () => import('../views/Pharm/Pharm.vue')
   },
   {
+    path: '/pharm-management',
+    name: 'PharmManagement',
+    meta: {
+      title: 'Управление аптекой'
+    },
+    component: () => import('../views/Pharm/PharmManagement.vue')
+  },
+  {
     path: '/events',
     name: 'Event',
     meta: {
@@ -67,7 +75,7 @@ const routes: Route[] = [
       title: 'Импорты'
     },
     component: () => import('../views/Import/Import.vue')
-  }
+  },
 ]
 
 const router = createRouter({
