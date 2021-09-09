@@ -1,0 +1,18 @@
+version: '3'
+services:
+    db:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: root
+            POSTGRES_USER: root
+            POSTGRES_DB: tests    
+        ports:
+            - 3366:3366    
+        networks: 
+            - db
+        volumes: 
+            - ./postgres:/var/lib/postgres
+
+networks:
+    db:
