@@ -1,0 +1,22 @@
+version : "3.7"
+services: 
+    db: 
+        image: postgres
+        environment: 
+            POSTGRES_PASSWORD: root
+            POSTGRES_USER: root
+            POSTGRES_DB: blog
+        volumes: 
+            - ./db:/var/lib/postgresql/data
+        ports: 
+            - '5433:5433'
+    node: 
+        build:
+            context: .
+            dockerfile: ./docker-node/dockerfile
+        ports:
+            - "3000:3000"
+        volumes: 
+            - ./:/usr/src/app/
+        depends_on: 
+            - db
