@@ -7,7 +7,7 @@ const sequelize = new Sequelize('blog', 'root', 'root', {
 (async () => {
     try {
         await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
+        console.log('Sequilize is running 🚀');
     } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
