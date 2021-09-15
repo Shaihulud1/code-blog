@@ -5,8 +5,9 @@ export class TestController {
 
     @Get('/test')
     public getTest() {
+
         return {
-            test: 'test'
+            test: 'test',
         }
     }
     
