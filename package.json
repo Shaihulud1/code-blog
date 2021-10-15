@@ -23,6 +23,8 @@
     "apollo-link-http": "^1.5.17",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "date-fns": "^2.23.0",
+    "date-fns-tz": "^1.1.6",
     "graphql": "^15.5.1",
     "graphql-tag": "^2.12.5",
     "primeflex": "^3.0.0",

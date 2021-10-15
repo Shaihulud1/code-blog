@@ -43,7 +43,7 @@
 <script lang="ts">
 import { defineComponent, ref, Ref, onMounted} from 'vue'
 import ViAxios from '@/modules/ViAxios'
-import { RefreshTokenResponse } from './types'
+import { RefreshTokenResponse } from '@/services/UserService/types'
 import router from '@/router'
 
 export default defineComponent({

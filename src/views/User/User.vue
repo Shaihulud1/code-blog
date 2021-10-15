@@ -75,7 +75,7 @@ import { defineComponent, ref, Ref, computed } from 'vue'
 import { FilterMatchMode } from 'primevue/api'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable';
-import { UserListItem } from './types'
+import { UserListItem } from '@/services/UserService/types'
 import UserModal from './UserModal.vue'
 
 export default defineComponent({

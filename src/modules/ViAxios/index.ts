@@ -1,6 +1,6 @@
 import store from '@/store'
 import axios from 'axios'
-import { RequestConfig, ViAxiosResponse } from './types'
+import { RequestConfig } from './types'
 import router from '@/router'
 
 
@@ -20,7 +20,7 @@ axios.interceptors.response.use(function (response) {
 });
 
 
-const ViAxios = async <T>(requestConfig: RequestConfig): Promise<ViAxiosResponse> => {
+const ViAxios = async <T>(requestConfig: RequestConfig) => {
   let headers = { 'Content-Type': 'application/json' }
   if (requestConfig.headers) {
     headers = Object.assign(headers, requestConfig.headers)
@@ -49,7 +49,7 @@ const ViAxios = async <T>(requestConfig: RequestConfig): Promise<ViAxiosResponse
     error.message = error.response.message
     return error.response
   })
-    type ViAxiosResponse1 = {
+    type ViAxiosResponse = {
         success: boolean;
         response: T;
         error?: {
@@ -58,7 +58,7 @@ const ViAxios = async <T>(requestConfig: RequestConfig): Promise<ViAxiosResponse
         },
         code: number;
     }
-    const returnData: ViAxiosResponse1 = {
+    const returnData: ViAxiosResponse = {
       success: isSuccess,
       response: response.data as T,
       error: !isSuccess ? { code: response.data.code, message: response.data.message } : undefined,

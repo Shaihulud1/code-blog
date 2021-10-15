@@ -250,7 +250,6 @@ export default defineComponent ({
             }
             return canSave
         })
-        console.log(String)
         return { loadingSNSelect, snSelect, canSave,
             pharmsSelect, selectedSN, selectedPharm, 
             orderDate, timeAt, timeTo, loadingPharmSelect,

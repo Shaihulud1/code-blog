@@ -53,12 +53,20 @@ const routes: Route[] = [
     component: () => import('../views/Pharm/Pharm.vue')
   },
   {
-    path: '/pharm-management',
-    name: 'PharmManagement',
+    path: '/pharm-management/schedules',
+    name: 'PharmManagementSchedules',
     meta: {
-      title: 'Управление аптекой'
+      title: 'Расписания смен'
     },
     component: () => import('../views/Pharm/PharmManagement.vue')
+  },
+  {
+    path: '/pharm-management/checkins',
+    name: 'PharmManagementCheckins',
+    meta: {
+      title: 'Чекины'
+    },
+    component: () => import('../views/Pharm/Checkin.vue')
   },
   {
     path: '/events',

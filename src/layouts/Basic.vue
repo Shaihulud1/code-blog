@@ -84,9 +84,21 @@ export default defineComponent({
       {
         label: 'Управление сотрудниками аптеки',
         icon: 'pi pi-fw pi-plus-circle',
-        command:() => { 
-          routeMenu('/pharm-management')
-        }
+        items: [
+          {
+            label: 'Графики',
+            command:() => { 
+              routeMenu('/pharm-management/schedules')
+            }
+          },
+          {
+            label: 'Чекины',
+            command:() => { 
+              routeMenu('/pharm-management/checkins')
+            }
+          }
+        ],
+
       },
       {
         label: 'Система',

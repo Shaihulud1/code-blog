@@ -1,29 +1,40 @@
 <template>
   <div class="schedule-wrapp">
     <FullCalendar
-      :events="shedule"
+      :events="schedules"
       :options="options"
     />
+    <Dialog
+      v-model:visible="timeModal"
+      header="Время смены"
+      :style="{width: '40vw', minWidth: '300px'}"
+      :modal="true"
+      position="center"
+    >
+      <TimeModal
+        v-model:order="orderSelect"
+        @timeSaved="timeModal = false"
+      />
+    </Dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, onMounted } from 'vue'
+import { defineComponent } from 'vue'
 import '@fullcalendar/core'
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import ViAxios from '@/modules/ViAxios';
+import TimeModal from './TimeModal.vue'
+import ScheduleCalendar from '@/services/ScheduleService/ScheduleCalendar'
 
 export default defineComponent({
+    components: {TimeModal},
     setup() {
-        const shedule = ref([
-            {"id": 1,"title": "All Day Event","start": "2017-02-01"},
-            {"id": 2,"title": "Long Event","start": "2017-02-07","end": "2017-02-10"},
-        ])
+        const { schedules, orderSelect, timeModal, eventDrop, eventClick } = ScheduleCalendar()
         const options = {
             plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-            initialDate : '2017-02-01',
+            initialDate : new Date,
             headerToolbar: {
                 left: 'prev',
                 center: 'title',
@@ -32,19 +43,16 @@ export default defineComponent({
             locale: 'ru',
             editable: true,
             selectable:true, 
-            selectMirror: true, 
-            dayMaxEvents: true,
+            selectMirror: true,
+            droppable: true,
+            allDayMaintainDuration: true,
+            eventStartEditable: true,
+            eventDurationEditable: true,
+            event: true,
+            eventDrop,
+            eventClick
         }
-
-        onMounted(async () => {
-            const schedules = await ViAxios({
-                method: 'get',
-                url: '/api/pharm-manager/schedules',
-            })
-            console.log(schedules)
-        })
-
-        return { shedule, options }
+        return { schedules, options, timeModal, orderSelect }
     }
 })
 
