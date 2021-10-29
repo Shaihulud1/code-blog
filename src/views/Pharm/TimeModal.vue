@@ -16,8 +16,7 @@
       :time-only="true"
       hour-format="24"
       placeholder="До"
-    >
-    </Calendar>
+    />
     <Button
       label="Сохранить"
       @click="saveOrder()"

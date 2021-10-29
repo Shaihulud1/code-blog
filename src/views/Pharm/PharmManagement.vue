@@ -3,8 +3,8 @@
     <FullCalendar
       :events="schedules"
       :options="options"
-      :allDayDefault="true"
-      timeZone="UTC"
+      :all-day-default="true"
+      time-zone="UTC"
     />
     <Dialog
       v-model:visible="timeModal"
