@@ -4,11 +4,13 @@ import { ScheduleCalendarType } from './types'
 import { UserScheduleType } from '@/services/UserService/types'
 import { OrderDrag } from '@/services/OrderService/types'
 import { date2TimeZone } from '@/modules/TimeZone'
+import { useToast } from "primevue/usetoast";
 
 const ScheduleCalendar = () => {
+    const toast = useToast();
     const schedules: Ref<ScheduleCalendarType[]> = ref([])
     const timeZone = 3
-    onMounted(async () => {
+    const fetchSchedule = async () => {
         const apiSchedules = await ViAxios<UserScheduleType[]>({
             method: 'get',
             url: '/api/pharm-manager/schedule/list',
@@ -23,7 +25,8 @@ const ScheduleCalendar = () => {
                 end: timeEnd
             }
         })
-    })
+    }
+    onMounted(async () => fetchSchedule())
 
     const orderSelect: Ref<OrderDrag> = ref({
         id: "",
@@ -44,9 +47,18 @@ const ScheduleCalendar = () => {
         orderSelect.value.id = info.event._def.publicId
         orderSelect.value.orderDate = date2TimeZone(info.event._instance.range.start, 0)
         timeModal.value = true
-      }
+    }
 
-    return { schedules, orderSelect, timeModal, eventDrop, eventClick }
+    const timeError = (message: string) => {
+        toast.add({severity:'error', summary: 'Ошибка смены графика', detail: message, life: 3000});
+
+        timeModal.value = false
+        fetchSchedule()
+        console.log(message)
+    }
+
+
+    return { schedules, orderSelect, timeModal, eventDrop, eventClick, timeError }
 }
 
 export default ScheduleCalendar

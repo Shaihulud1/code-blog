@@ -84,6 +84,14 @@ const routes: Route[] = [
     },
     component: () => import('../views/Import/Import.vue')
   },
+  {
+    path: '/pharm-management/cancel-orders',
+    name: 'CancelOrders',
+    meta: {
+      title: 'Подтверждение отмены заказов'
+    },
+    component: () => import('../views/Pharm/CancelOrders.vue')
+  },
 ]
 
 const router = createRouter({

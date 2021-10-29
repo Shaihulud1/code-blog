@@ -70,15 +70,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-    .import {
-        &__item {
-            &__inner {
-                display: grid;
-                grid-template-columns: 8fr 2fr;
-            }
-            &__launch {
-                margin: auto;
-            }
-        }
-    }
+
 </style>

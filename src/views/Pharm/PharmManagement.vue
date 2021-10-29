@@ -3,6 +3,8 @@
     <FullCalendar
       :events="schedules"
       :options="options"
+      :allDayDefault="true"
+      timeZone="UTC"
     />
     <Dialog
       v-model:visible="timeModal"
@@ -14,6 +16,7 @@
       <TimeModal
         v-model:order="orderSelect"
         @timeSaved="timeModal = false"
+        @timeError="timeError"
       />
     </Dialog>
   </div>
@@ -31,7 +34,7 @@ import ScheduleCalendar from '@/services/ScheduleService/ScheduleCalendar'
 export default defineComponent({
     components: {TimeModal},
     setup() {
-        const { schedules, orderSelect, timeModal, eventDrop, eventClick } = ScheduleCalendar()
+        const { schedules, orderSelect, timeModal, eventDrop, eventClick, timeError } = ScheduleCalendar()
         const options = {
             plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
             initialDate : new Date,
@@ -52,7 +55,7 @@ export default defineComponent({
             eventDrop,
             eventClick
         }
-        return { schedules, options, timeModal, orderSelect }
+        return { schedules, options, timeModal, orderSelect, timeError }
     }
 })
 
@@ -63,5 +66,9 @@ export default defineComponent({
     a { 
         color: white !important
     }
+}
+.fc-event-time
+{
+   display:none !important;
 }
 </style>

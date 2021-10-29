@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import { Order } from "@/services/OrderService/types";
 import { date2TimeZone } from '@/modules/TimeZone'
 
+
 const TimeModal = (props: any, emit: any) => {
     const fromTime = ref()
     const toTime = ref()
@@ -12,7 +13,7 @@ const TimeModal = (props: any, emit: any) => {
     const saveOrder = async () => {
         const from = fromTime.value instanceof Date ? `${fromTime.value.getHours()}:${fromTime.value.getMinutes()}` : fromTime.value
         const to = toTime.value instanceof Date ? `${toTime.value.getHours()}:${toTime.value.getMinutes()}` : toTime.value
-        await ViAxios({
+        const request = await ViAxios({
             method: 'post',
             url: '/api/pharm-manager/schedule/switch-date',
             body: { 
@@ -23,7 +24,11 @@ const TimeModal = (props: any, emit: any) => {
                 orderDate: props.order.orderDate,
             }
         })
-        emit('timeSaved')
+        if (request.code !== 200) {
+            emit('timeError', request.error?.message)
+        } else {
+            emit('timeSaved')
+        }
     }
     onMounted(async () => {
         const orderReq = await ViAxios<Order>({

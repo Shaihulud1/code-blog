@@ -1,5 +1,6 @@
 <template>
   <component :is="layout" />
+  <Toast />
 </template>
 
 <script lang="ts">

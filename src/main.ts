@@ -25,7 +25,9 @@ import Badge from 'primevue/badge';
 import AutoComplete from 'primevue/autocomplete';
 import Menu from 'primevue/menu';
 import FullCalendar from 'primevue/fullcalendar';
-
+import ToastService from 'primevue/toastservice';
+import Toast from 'primevue/toast';
+import Tooltip from 'primevue/tooltip';
 
 
 import 'primevue/resources/primevue.min.css'
@@ -47,8 +49,11 @@ app.use(PrimeVue, {
         dateFormat: 'mm.dd.yy',
     }
 })
+app.use(ToastService)
+app.directive('tooltip', Tooltip)
 
 
+app.component('Toast', Toast)
 app.component('Message', Message)
 app.component('InputText', InputText)
 app.component('Button', Button)

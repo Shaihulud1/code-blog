@@ -68,20 +68,6 @@ export default defineComponent({
         }
       },
       {
-        label: 'Пользователи',
-        icon: 'pi pi-fw pi-user',
-        command:() => { 
-          routeMenu('/users')
-        }
-      },
-      {
-        label: 'Задачи',
-        icon: 'pi pi-fw pi-check',
-        command:() => { 
-          routeMenu('/orders')
-        }
-      },
-      {
         label: 'Управление сотрудниками аптеки',
         icon: 'pi pi-fw pi-plus-circle',
         items: [
@@ -92,9 +78,9 @@ export default defineComponent({
             }
           },
           {
-            label: 'Чекины',
+            label: 'Подтверждение отмены смен',
             command:() => { 
-              routeMenu('/pharm-management/checkins')
+              routeMenu('/pharm-management/cancel-orders')
             }
           }
         ],
@@ -180,5 +166,19 @@ export default defineComponent({
 	}
   .menu-text {
     margin-left: 20px;
+  }
+  .import {
+      &__item {
+          &__inner {
+              display: grid;
+              grid-template-columns: 8fr 2fr;
+          }
+          &__launch {
+              margin: auto;
+              display: grid;
+              grid-column-gap: 10px;
+              grid-row-gap: 1em;
+          }
+      }
   }
 </style>

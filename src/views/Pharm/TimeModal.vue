@@ -16,7 +16,8 @@
       :time-only="true"
       hour-format="24"
       placeholder="До"
-    />
+    >
+    </Calendar>
     <Button
       label="Сохранить"
       @click="saveOrder()"
@@ -41,10 +42,10 @@ export default defineComponent ({
             }
         },
     },
-    emits: ['timeSaved'],
+    emits: ['timeSaved', 'timeError'],
     setup(props, { emit }) {
         const {saveOrder, fromTime, toTime } = TimeModal(props, emit)
-        return {saveOrder, fromTime, toTime }; 
+        return {saveOrder, fromTime, toTime}; 
     }
 })
 </script>
