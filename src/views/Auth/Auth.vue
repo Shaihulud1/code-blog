@@ -74,7 +74,7 @@ export default defineComponent({
       if (errors.value.length === 0) {
         const authRequest = await ViAxios<RefreshTokenResponse>({
           method: 'post',
-          url: '/api/internal/auth/login',
+          url: '/api/auth/login',
           body: { phone: phone.value.replace(/\s|\-|\)|\(|\+/g, ''), password: password.value }
         })
         if (authRequest.error) {

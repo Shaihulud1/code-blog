@@ -72,12 +72,6 @@ export default defineComponent({
         icon: 'pi pi-fw pi-plus-circle',
         items: [
           {
-            label: 'Графики',
-            command:() => { 
-              routeMenu('/pharm-management/schedules')
-            }
-          },
-          {
             label: 'Подтверждение отмены смен',
             command:() => { 
               routeMenu('/pharm-management/cancel-orders')
